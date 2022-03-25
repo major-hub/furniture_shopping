@@ -107,7 +107,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
-LANGUAGE_CODE = 'en'
+LANGUAGE_CODE = 'tr'
 
 TIME_ZONE = 'Asia/Tashkent'
 
@@ -128,23 +128,24 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+AUTH_USER_MODEL = 'users.CustomUser'
 
 CORS_ALLOW_ALL_ORIGINS = True
 
 LANGUAGES = (
+    ('tr', 'Turkish'),
     ('uz', 'Uzbek'),
-    ('ru', 'Russian'),
     ('en', 'English'),
 )
 
 PARLER_LANGUAGES = {
     None: (
+        {'code': 'tr', },
         {'code': 'uz', },
-        {'code': 'ru', },
         {'code': 'en', },
     ),
     'default': {
-        'fallbacks': ['uz'],
+        'fallbacks': ['tr'],
         'hide_untranslated': False,  # Default
     }
 }
