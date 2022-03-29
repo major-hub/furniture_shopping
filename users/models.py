@@ -1,5 +1,5 @@
-from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.base_user import BaseUserManager
 
 
@@ -34,10 +34,11 @@ class CustomUserManager(BaseUserManager):
 
 
 class CustomUser(AbstractUser):
-    first_name = None
-    last_name = None
     username = None
-    email = models.EmailField()
+    email = models.EmailField(unique=True)
+
+    # first_name, last_name already have
+    image = models.ImageField(upload_to='users/', null=True, blank=True)
 
     is_ban = models.BooleanField(default=False)
 
@@ -48,3 +49,49 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.email
+
+
+class Basket(models.Model):
+    user = models.ForeignKey('CustomUser', on_delete=models.CASCADE)
+    furniture = models.ForeignKey('shop.Furniture', on_delete=models.CASCADE)
+    quantity = models.PositiveSmallIntegerField()
+
+
+class Order(models.Model):
+    STATUS = (
+        ('new', 'New'),
+        ('confirmed', 'Confirmed'),
+        ('on_way', 'On way'),
+        ('delivered', 'Delivered'),
+        ('cancelled', 'Cancelled'),
+    )
+    user = models.ForeignKey('CustomUser', on_delete=models.CASCADE)
+    status = models.CharField(max_length=10, choices=STATUS, default=STATUS[0][0])
+
+    phone_number = models.CharField(max_length=15)
+    comment = models.TextField(blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.user.email
+
+
+class OrderDetail(models.Model):
+    CURRENCY = (
+        ('TRY', 'TRY'),
+        ('USD', 'USD'),
+        ('UZS', 'UZS'),
+    )
+    order = models.ForeignKey('Order', on_delete=models.CASCADE)
+    furniture = models.ForeignKey('shop.Furniture', on_delete=models.CASCADE)
+    price = models.DecimalField(max_digits=11, decimal_places=2)
+    currency = models.CharField(max_length=3, choices=CURRENCY)
+    quantity = models.PositiveSmallIntegerField()
+
+    def __str__(self):
+        return f"{self.price} {self.currency}"
+
+    class Meta:
+        unique_together = ['order', 'furniture']

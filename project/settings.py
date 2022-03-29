@@ -36,6 +36,8 @@ INSTALLED_APPS = [
 
     # apps
     'shop.apps.ShopConfig',
+    'users.apps.UsersConfig',
+    'posts.apps.PostsConfig',
 
     # cleanup
     'django_cleanup.apps.CleanupConfig'
