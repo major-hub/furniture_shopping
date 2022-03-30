@@ -18,25 +18,25 @@ ___
 # postgres
 
 ```
-CREATE DATABASE online_shopping WITH OWNER solijonov;
-GRANT ALL ON DATABASE online_shopping TO solijonov;
+CREATE DATABASE furniture_shopping WITH OWNER solijonov;
+GRANT ALL ON DATABASE furniture_shopping TO solijonov;
 ```
 
 ___
 
-# Systemd service [online_shopping.service]
+# Systemd service [furniture_shopping.service]
 
 ```
 [Unit]
-Description=Systemd service daemon for online_shopping
+Description=Systemd service daemon for furniture_shopping
 Before=nginx.service
 After=network.target
 
 [Service]
 User=major
 Group=major
-WorkingDirectory=/home/major/online_shopping
-ExecStart=/home/major/online_shopping/venv/bin/gunicorn --access-logfile - --workers 3 --bind unix:/home/major/online_shopping/gunicorn.sock project.wsgi:application
+WorkingDirectory=/home/major/furniture_shopping
+ExecStart=/home/major/furniture_shopping/venv/bin/gunicorn --access-logfile - --workers 3 --bind unix:/home/major/furniture_shopping/gunicorn.sock project.wsgi:application
 Restart=always
 SyslogIdentifier=gunicorn
 
@@ -46,7 +46,7 @@ WantedBy=multi-user.target
 
 ___
 
-# Nginx [online_shopping_backend]
+# Nginx [furniture_shopping_backend]
 
 ```
 server {
@@ -55,23 +55,23 @@ server {
 
     location = /favicon.ico { access_log off; log_not_found off; }
     location /static {
-        alias /home/major/online_shopping/static;
+        alias /home/major/furniture_shopping/static;
     }
     
     location /media  {
-        alias /home/major/online_shopping/media;
+        alias /home/major/furniture_shopping/media;
     }
 
     location / {
         include proxy_params;
-        proxy_pass http://unix:/home/major/online_shopping/gunicorn.sock;
+        proxy_pass http://unix:/home/major/furniture_shopping/gunicorn.sock;
     }
 }
 ```
 
 ___
 
-# Nginx [online_shopping_frontend]
+# Nginx [furniture_shopping_frontend]
 
 ```
 server {
