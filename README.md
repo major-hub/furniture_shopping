@@ -1,4 +1,4 @@
-# online_shopping
+# furniture_shopping
 
 Online Furniture e-Commerce by iFraganus
 ___
